@@ -14,7 +14,7 @@
 
 ### 1. Issue Overview
 
-In **macOS 27.0 (Build 26A428)**, whenever a user updates a contact's avatar (using custom photos, Memoji, or Emoji) in Contacts or Messages, the avatar displays normally for a few seconds, but **automatically reverts to the default monogram initial (e.g. "W") after approximately 15 to 20 seconds**.
+In **macOS 27.0 (Build 26A428)**, whenever a user updates a contact's avatar (using custom photos, Memoji, or Emoji) in Contacts or Messages, the avatar displays normally for a few seconds, but **automatically reverts to the default monogram initial (e.g. "T") after approximately 15 to 20 seconds**.
 
 #### Key Observations:
 - **iPhone / iOS Works Correctly**: When changing the avatar on iPhone, it persists permanently on iOS. However, when synced down to Mac, the Mac still reverts to the monogram initial.
@@ -128,7 +128,7 @@ https://github.com/Prognosticate-X/macos-contacts-avatar-bug
 
 ### 1. 问题概述
 
-在 **macOS 27.0 正式版（Build 26A428）** 中，用户在通讯录（Contacts.app）或信息（Messages.app）中修改联系人头像（无论是自定义照片、系统 Emoji 还是拟我表情 Memoji），保存后在界面上正常显示数秒，但在 **15 ~ 20 秒左右会自动回退为默认的单字母占位符**（例如 Wife 回退为大写字母“W”）。
+在 **macOS 27.0 正式版（Build 26A428）** 中，用户在通讯录（Contacts.app）或信息（Messages.app）中修改联系人头像（无论是自定义照片、系统 Emoji 还是拟我表情 Memoji），保存后在界面上正常显示数秒，但在 **15 ~ 20 秒左右会自动回退为默认的单字母占位符**（例如 Test 回退为大写字母“T”）。
 
 #### 核心特征：
 * **iPhone 端完全正常**：在 iPhone 上修改头像能永久保存，绝不回退；但只要同步到 Mac，Mac 依然会在数秒后回退为字母。

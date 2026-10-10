@@ -41,7 +41,7 @@ sequenceDiagram
     Contacts->>Snapshotter: Invalidate avatar cache & snapshot
     Snapshotter->>Snapshotter: Query recipe: No avatarRecipeData
     Snapshotter->>Snapshotter: Generate monogram initial fallback snapshot
-    Snapshotter-->>User: OVERRIDE UI with Initial "W" (Reversion complete!)
+    Snapshotter-->>User: OVERRIDE UI with Initial "T" (Reversion complete!)
 ```
 
 ---
