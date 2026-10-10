@@ -1,8 +1,11 @@
-# In-Depth Root Cause Analysis: ChangeHistoryFetch Regression in macOS 27.0
+# In-Depth Root Cause Analysis: ChangeHistoryFetch Regression in macOS 27.0 & 27.0.1
+
+> **Apple Feedback ID**: `FB25131637`  
+> **Affected Versions**: macOS 27.0 (Build 26A428), macOS 27.0.1 (confirmed still persisting)
 
 ## 1. Executive Summary
 
-In macOS 27.0 (Build 26A428), modifying a contact's avatar (using Memoji, custom photos, or Emoji) causes the avatar to display briefly and then automatically revert to a default monogram initial within **15 to 20 seconds**.
+In macOS 27.0 (Build 26A428) and macOS 27.0.1, modifying a contact's avatar (using Memoji, custom photos, or Emoji) causes the avatar to display briefly and then automatically revert to a default monogram initial within **15 to 20 seconds**.
 
 Using macOS Unified Logging traces, we pinpointed the exact bug in the Contacts framework (`Contacts.framework` and `ContactsUI.framework`). When a contact modification is pushed to iCloud CardDAV and acknowledged back via APNS push notifications, the local change history fetch engine fails to resolve the container/group for the updated contact, and **explicitly converts the update event (`change type 1`) into a deletion event (`delete change type`)**. 
 

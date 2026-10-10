@@ -1,9 +1,9 @@
-# macOS 27.0 Contacts Avatar Reversion Regression Analysis & Diagnostic Tool
+# macOS 27 Contacts Avatar Reversion Regression Analysis & Diagnostic Tool
 
-[![Platform](https://img.shields.io/badge/Platform-macOS%2027.0%20(Build%2026A428)-blue.svg)](#)
-[![Status](https://img.shields.io/badge/Status-Regression%20Confirmed-red.svg)](#)
+[![Platform](https://img.shields.io/badge/Platform-macOS%2027.0%20%7C%2027.0.1-blue.svg)](#)
+[![Status](https://img.shields.io/badge/Status-Persists%20in%2027.0.1-red.svg)](#)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Feedback Assistant](https://img.shields.io/badge/Apple%20Radar-Submit%20Dupe-orange.svg)](#how-to-submit-a-duplicate-report-to-apple)
+[![Apple Radar](https://img.shields.io/badge/Apple%20Radar-FB25131637-orange.svg)](#how-to-submit-a-duplicate-report-to-apple)
 
 [English](#english) | [中文说明](#中文说明)
 
@@ -14,7 +14,7 @@
 
 ### 1. Issue Overview
 
-In **macOS 27.0 (Build 26A428)**, whenever a user updates a contact's avatar (using custom photos, Memoji, or Emoji) in Contacts or Messages, the avatar displays normally for a few seconds, but **automatically reverts to the default monogram initial (e.g. "T") after approximately 15 to 20 seconds**.
+In **macOS 27.0 (Build 26A428)** and **macOS 27.0.1** (tested and confirmed still persisting in 27.0.1), whenever a user updates a contact's avatar (using custom photos, Memoji, or Emoji) in Contacts or Messages, the avatar displays normally for a few seconds, but **automatically reverts to the default monogram initial (e.g. "T") after approximately 15 to 20 seconds**.
 
 #### Key Observations:
 - **iPhone / iOS Works Correctly**: When changing the avatar on iPhone, it persists permanently on iOS. However, when synced down to Mac, the Mac still reverts to the monogram initial.
@@ -95,7 +95,9 @@ Elapsed Duration from Save to Reversion: 19.34 seconds
 
 ### 4. How to Submit a Duplicate Report to Apple
 
-To expedite an official fix from Apple in macOS 27.0.1, please submit a duplicate bug report via **Feedback Assistant**:
+**Primary Apple Feedback / Radar ID: `FB25131637`**
+
+To expedite an official fix from Apple, please submit a duplicate bug report via **Feedback Assistant** referencing the primary feedback ID **`FB25131637`**:
 
 1. Open **Feedback Assistant** on your Mac (`open applefeedback://` or press `Cmd+Space` and type *Feedback Assistant*).
 2. Click **New Feedback** -> **macOS** -> **Contacts**.
@@ -103,10 +105,13 @@ To expedite an official fix from Apple in macOS 27.0.1, please submit a duplicat
 
 ```markdown
 ### Title
-[macOS 27.0 Regression] Contact avatar reverts to monogram initial after 15-20s due to ChangeHistoryFetch classifying update as delete
+[macOS 27.0 / 27.0.1 Regression] Contact avatar reverts to monogram initial after 15-20s due to ChangeHistoryFetch classifying update as delete
+
+### Reference Primary Radar
+Duplicate of: FB25131637
 
 ### Problem Description
-In macOS 27.0 (Build 26A428), editing any contact avatar (Memoji, photo, or emoji) saves temporarily, but automatically reverts to the default monogram letter initial after ~16 seconds.
+In macOS 27.0 (Build 26A428) and macOS 27.0.1 (confirmed still present after upgrading to 27.0.1), editing any contact avatar (Memoji, photo, or emoji) saves temporarily, but automatically reverts to the default monogram letter initial after ~16 seconds.
 
 The change syncs to iCloud and displays permanently on iOS, but every Mac receiving the sync triggers the regression.
 
@@ -128,12 +133,12 @@ https://github.com/Prognosticate-X/macos-contacts-avatar-bug
 
 ### 1. 问题概述
 
-在 **macOS 27.0 正式版（Build 26A428）** 中，用户在通讯录（Contacts.app）或信息（Messages.app）中修改联系人头像（无论是自定义照片、系统 Emoji 还是拟我表情 Memoji），保存后在界面上正常显示数秒，但在 **15 ~ 20 秒左右会自动回退为默认的单字母占位符**（例如 Test 回退为大写字母“T”）。
+在 **macOS 27.0 正式版（Build 26A428）及最新更新 macOS 27.0.1** 中（实测升级至 27.0.1 后缺陷依然存在），用户在通讯录（Contacts.app）或信息（Messages.app）中修改联系人头像（无论是自定义照片、系统 Emoji 还是拟我表情 Memoji），保存后在界面上正常显示数秒，但在 **15 ~ 20 秒左右会自动回退为默认的单字母占位符**（例如 Test 回退为大写字母“T”）。
 
 #### 核心特征：
 * **iPhone 端完全正常**：在 iPhone 上修改头像能永久保存，绝不回退；但只要同步到 Mac，Mac 依然会在数秒后回退为字母。
 * **全媒介格式均受影响**：照片、Emoji、Memoji 无一幸免。
-* **本地重置完全无效**：清空 AddressBook 缓存目录、重置 SwiftData `accounts.accountdb` 或开关 iCloud 通讯录均无法解决。
+* **本地重置与小版本升级完全无效**：清空 AddressBook 缓存目录、重置 SwiftData `accounts.accountdb`、开关 iCloud 通讯录，或升级到 macOS 27.0.1 均无法解决。
 
 ---
 
@@ -173,9 +178,11 @@ python3 ./tools/analyze_log.py ./samples/sanitized_reproduction.log
 
 ### 4. 推动苹果官方修复指南
 
-该问题属于 macOS 27.0 首发版本的系统代码缺陷，需等待苹果在后续版本（如 macOS 27.0.1）推送修复。
+**主工单编号（Primary Apple Feedback ID）：`FB25131637`**
 
-建议所有遇到此问题的用户通过 Mac 自带的 **反馈助理（Feedback Assistant）** 提交 Duplicate 工单，附件上传本项目提供的脱敏日志 [`samples/sanitized_reproduction.log`](./samples/sanitized_reproduction.log)，共同敦促苹果工程团队尽快发布维护更新。
+该问题属于 macOS 27 的系统底层代码缺陷，且**实测更新 macOS 27.0.1 后仍未解决**。
+
+建议所有遇到此问题的用户通过 Mac 自带的 **反馈助理（Feedback Assistant）** 提交 Duplicate 工单，在反馈描述中注明关联主工单 **`FB25131637`**，并附件上传本项目提供的脱敏日志 [`samples/sanitized_reproduction.log`](./samples/sanitized_reproduction.log)，形成联名效应，共同敦促苹果工程团队尽快在后续版本中彻底修复。
 
 ---
 

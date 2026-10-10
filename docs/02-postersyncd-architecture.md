@@ -42,5 +42,6 @@ During exhaustive testing, the following remediation attempts were verified inef
 2. **Deleting `~/Library/Application Support/AddressBook`**: Fails because upon initial synchronization from iCloud, the delta processor hits the same code path.
 3. **Clearing SwiftData `accounts.accountdb`**: Fails because account authentication is unaffected.
 4. **Modifying from iPhone or iCloud.com**: Fails on Mac because as soon as the Mac receives the remote update, it runs the same flawed change history parser.
+5. **Updating to macOS 27.0.1**: Fails because the underlying fallback logic in `Contacts.framework` remains unpatched in macOS 27.0.1.
 
-**Conclusion**: The issue is entirely caused by an upstream logic error within `Contacts.framework` and `ContactsUI.framework` in macOS 27.0, and can only be permanently fixed by an official software update from Apple (e.g., macOS 27.0.1).
+**Conclusion**: The issue is entirely caused by an upstream logic error within `Contacts.framework` and `ContactsUI.framework` in macOS 27.0, and has been confirmed to **still persist in macOS 27.0.1**. It can only be permanently resolved by an official bug fix from Apple (e.g., macOS 27.0.2 or 27.1).
