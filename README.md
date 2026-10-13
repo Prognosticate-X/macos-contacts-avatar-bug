@@ -1,9 +1,10 @@
 # macOS 27 Contacts Avatar Reversion Regression Analysis & Diagnostic Tool
 
 [![Platform](https://img.shields.io/badge/Platform-macOS%2027.0%20%7C%2027.0.1-blue.svg)](#)
-[![Status](https://img.shields.io/badge/Status-Persists%20in%2027.0.1-red.svg)](#)
+[![Status](https://img.shields.io/badge/Status-Regression%20Confirmed-red.svg)](#)
+[![Workaround](https://img.shields.io/badge/Workaround-Sign%20Out%20%26%20In%20Apple%20Account-success.svg)](#3--verified-workaround-how-to-fix-it-now)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
-[![Apple Radar](https://img.shields.io/badge/Apple%20Radar-FB25131637-orange.svg)](#how-to-submit-a-duplicate-report-to-apple)
+[![Apple Radar](https://img.shields.io/badge/Apple%20Radar-FB25131637-orange.svg)](#5-how-to-submit-a-duplicate-report-to-apple)
 
 [English](#english) | [中文说明](#中文说明)
 
@@ -58,7 +59,26 @@ Detailed technical write-ups are available in the [`docs/`](./docs/) directory:
 
 ---
 
-### 3. Diagnostic Tool
+### 3. ✅ Verified Workaround (How to Fix It Now)
+
+If your Mac is experiencing this issue on macOS 27 or 27.0.1, we have tested and verified that **completely signing out of your Apple Account and signing back in** permanently resolves the problem:
+
+#### Step-by-Step Instructions:
+1. Open **System Settings** on your Mac.
+2. Click on your **Apple Account** (your profile at the top of the sidebar).
+3. Scroll to the bottom and click **Sign Out**. *(When prompted whether to keep a copy of your data on this Mac, you can choose to keep copies).*
+4. Once signed out, restart your Mac.
+5. Re-open **System Settings**, sign back into your Apple Account, and ensure **Contacts** synchronization is enabled.
+6. Open Contacts.app and set your avatars—they will now stick permanently and never revert!
+
+#### Technical Rationale (Why this works):
+* **Why toggling Contacts or clearing `AddressBook` fails:** Merely toggling the sync switch or removing local database files leaves the underlying Account Source GUID bindings and CloudKit subscriptions in `accounts.accountdb` intact, preserving the desynced container mapping.
+* **Why signing out works:** Completely signing out destroys the entire CardDAV account session and tears down the desynced local container hierarchy.
+* **Why signing back in fixes it:** Re-authenticating provisions a clean CardDAV group and container structure fresh from iCloud. The Contacts framework can now successfully fetch the parent group (`fetchGroupForChange`), which prevents the faulty `making it a delete change type` fallback from being triggered.
+
+---
+
+### 4. Diagnostic Tool
 
 We provide a built-in automated CLI tool to verify if your Mac is suffering from this bug.
 
@@ -93,7 +113,7 @@ Elapsed Duration from Save to Reversion: 19.34 seconds
 
 ---
 
-### 4. How to Submit a Duplicate Report to Apple
+### 5. How to Submit a Duplicate Report to Apple
 
 **Primary Apple Feedback / Radar ID: `FB25131637`**
 
@@ -162,7 +182,27 @@ https://github.com/Prognosticate-X/macos-contacts-avatar-bug
 
 ---
 
-### 3. 自助诊断工具使用
+### 3. ✅ 已验证有效解决方案（如何立即解决）
+
+如果你在 macOS 27 或 27.0.1 中遇到了此问题，我们已实测并验证：**在系统设置中完全退出 Apple 账户并重新登录** 可以彻底解决该问题，头像不再回退！
+
+#### 具体操作步骤：
+1. 打开 Mac 上的 **系统设置**。
+2. 点击左上角的 **Apple 账户**（你的头像与名字）。
+3. 滑动到底部，点击 **退出登录**（系统提示是否在 Mac 上保留通讯录等数据副本时，可选择保留副本）。
+4. 退出完成后，建议重启一次 Mac。
+5. 重新打开 **系统设置**，重新登录你的 Apple 账户，并确保勾选开启 **通讯录** 同步。
+6. 打开通讯录重新修改头像——头像将稳固保存，不会再自动回退！
+
+#### 深入技术原理解密（为什么有效）：
+* **为什么之前单独“开关通讯录同步”或“删除 `AddressBook` 缓存”无效？**  
+  因为 macOS 系统级的账户数据库（`accounts.accountdb`）仍保留着旧的 Account Source GUID 与失效的群组映射通道，重新拉取依然找不到对应群组。
+* **为什么“完全登出 Apple ID 并重新登录”有效？**  
+  完全登出会彻底销毁系统层所有陈旧的 CardDAV 映射凭证与 CloudKit 订阅管道；重新登录时，系统会从云端完整拉取并重建一套全新的容器群组架构。此时本地联系人框架能正常获取所属群组（`fetchGroupForChange`），系统不会再触发 `making it a delete change type` 的伪造删除逻辑，头像因此得以永久稳固保存！
+
+---
+
+### 4. 自助诊断工具使用
 
 本项目自带轻量化自动化诊断工具，可在终端一键验证：
 
@@ -176,7 +216,7 @@ python3 ./tools/analyze_log.py ./samples/sanitized_reproduction.log
 
 ---
 
-### 4. 推动苹果官方修复指南
+### 5. 推动苹果官方修复指南
 
 **主工单编号（Primary Apple Feedback ID）：`FB25131637`**
 

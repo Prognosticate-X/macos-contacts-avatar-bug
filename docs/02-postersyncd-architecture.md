@@ -45,3 +45,9 @@ During exhaustive testing, the following remediation attempts were verified inef
 5. **Updating to macOS 27.0.1**: Fails because the underlying fallback logic in `Contacts.framework` remains unpatched in macOS 27.0.1.
 
 **Conclusion**: The issue is entirely caused by an upstream logic error within `Contacts.framework` and `ContactsUI.framework` in macOS 27.0, and has been confirmed to **still persist in macOS 27.0.1**. It can only be permanently resolved by an official bug fix from Apple (e.g., macOS 27.0.2 or 27.1).
+
+---
+
+## 4. The Effective Resolution: Full Account Re-Authentication
+
+While granular resets (toggling sync or deleting file caches) fail because the active CardDAV session retains the stale container mapping, **completely signing out of the Apple Account in macOS System Settings and signing back in** forces macOS to rebuild the entire CardDAV Account Source container hierarchy from scratch. This restores the group mapping, stops `ChangeHistoryFetch` from classifying updates as deletions, and allows contact photos to persist permanently.

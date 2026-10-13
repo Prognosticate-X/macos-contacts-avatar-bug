@@ -102,3 +102,15 @@ Simultaneously across all system processes:
    }
    ```
    This converts the avatar modification event into a likeness deletion event.
+
+---
+
+## 5. Verified Workaround & Resolution Mechanism
+
+**Workaround**: Completely sign out of the Apple Account in macOS **System Settings** and sign back in.
+
+**Technical Mechanism**:
+1. The error `Could not fetch group for change type 1` occurs because an in-place OS upgrade desynchronizes the local CardDAV account source container GUIDs stored in `accounts.accountdb` from iCloud's server-side group hierarchy.
+2. Partial remediations (such as toggling the Contacts switch or clearing the `AddressBook` folder) fail because the underlying system-level Account Source bindings and CloudKit subscriptions remain cached.
+3. Completely signing out of the Apple Account terminates the entire CardDAV session and purges the desynced container hierarchy.
+4. Signing back in provisions a clean CardDAV container and group structure from iCloud scratch. The Contacts framework can now resolve the parent group (`fetchGroupForChange`), preserving the modification event and permanently preventing the `delete change type` fallback from firing.
